@@ -1,0 +1,38 @@
+import { useState, useRef, useEffect } from 'react';
+    
+    function Form() {
+
+      const [seconds, setSeconds] = useState(0);
+      const timerRef = useRef(null); // Ref to store the timer ID
+    
+      const startTimer = () => {
+        timerRef.current = setInterval(() => {
+          setSeconds((prevSeconds) => prevSeconds + 1);
+        }, 10); // Update every second
+      };
+    
+      const stopTimer = () => {
+        clearInterval(timerRef.current);
+      };
+    
+      const resetTimer = () => {
+        clearInterval(timerRef.current);
+        setSeconds(0);
+      };
+    
+      // Cleanup function to clear the interval when the component unmounts
+      useEffect(() => {
+        return () => clearInterval(timerRef.current);
+      }, []);
+    
+      return (
+        <div>
+          <p>Time elapsed: {seconds} seconds</p>
+          <button onClick={startTimer}>Start</button>
+          <button onClick={stopTimer}>Stop</button>
+          <button onClick={resetTimer}>Reset</button>
+        </div>
+      );
+    }
+
+export default Form
