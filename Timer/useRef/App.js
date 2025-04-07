@@ -4,7 +4,7 @@ function App() {
 
   const [timer, setTimer] = useState(0)
   let interval;
-  const increment = useRef();
+  const increment = useRef()
   
   useEffect(() => {
     increment.current = setInterval(() => {
