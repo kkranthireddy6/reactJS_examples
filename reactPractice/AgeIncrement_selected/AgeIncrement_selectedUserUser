@@ -1,0 +1,73 @@
+import React, { useState, useMemo } from 'react';
+import './style.css';
+
+export default function App() {
+  const [users, setUsers] = useState([
+    { id: 1, name: 'Kyle', age: 27 },
+    { id: 2, name: 'Sally', age: 32 },
+    { id: 3, name: 'Mike', age: 54 },
+    { id: 4, name: 'Jim', age: 16 },
+  ]);
+
+  const [selectedUserId, setSelectedUserId] = useState();
+
+  const incrementAge = (id) => {
+    setUsers((users) => {
+      return users.map((user) => {
+        if (user.id === id) {
+          return { ...user, age: user.age + 1 };
+        } else {
+          return user;
+        }
+      });
+    });
+  };
+
+  const selectedUser = (id) => {
+    setSelectedUserId(id);
+  };
+
+  const selectUser = useMemo(
+    () => users.find((user) => user.id === selectedUserId),
+    [users, selectedUserId]
+  );
+
+  return (
+    <>
+      <div>
+        <b>Selected User :</b>
+        {selectUser == null
+          ? 'None'
+          : `${selectUser.name} is ${selectUser.age} years Old`}
+      </div>
+      <div style={{ marginTop: '20px' }}>
+        <table>
+          <thead>
+            <tr>
+              <th style={{ width: '50%' }}>DATA</th>
+              <th>Increment Button</th>
+              <th>Select Button</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{`${user.name} is ${user.age} years old `}</td>
+                <td>
+                  <button onClick={() => incrementAge(user.id)}>
+                    Increment Age
+                  </button>
+                </td>
+                <td>
+                  <button onClick={() => selectedUser(user.id)}>
+                    Select User
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </>
+  );
+}
