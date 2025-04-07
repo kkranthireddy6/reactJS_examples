@@ -1,0 +1,99 @@
+import React, { useState } from 'react'
+
+function TodoList() {
+
+    const [userInput, setUserInput] = useState('')
+    const [todoList, setTodosList] = useState([])
+    const [EditIndex, setEditedIndex] = useState(null)
+    const [EditText, setEditedText] = useState('')
+
+    const AddTodos = (e) => {
+        e.preventDefault()
+        setTodosList(prevList => [...prevList, { id: Date.now(), value: userInput }])
+        setUserInput('')
+    }
+    const EditedTodo = (index) => {
+        setEditedIndex(index)
+        setEditedText(todoList[index].value)
+    }
+
+    const SaveTodos = () => {
+        const newTodo = [...todoList]
+        newTodo[EditIndex].value = EditText
+        setTodosList(newTodo)
+        setEditedIndex(null)
+        setEditedText('')
+    }
+
+    const CancelTodos = () => {
+        setEditedIndex(null)
+        setEditedText('')
+    }
+
+    const DeletedTodo = (id) => {
+        setTodosList(todoList.filter(prevList => prevList.id !== id))
+        //setTodosList(todoList.splice(index, 1))
+    }
+
+    const clearAllTodos = () => {
+        setTodosList([])
+    }
+
+    return (
+        <div style={{ marginLeft: "20px" }}>
+            <h2>Todo List - App</h2>
+            <div>
+                <form onSubmit={AddTodos}>
+                    <input type='text' value={userInput} onChange={(e) => setUserInput(e.target.value)} placeholder='Add a todo' />
+                    <input type='submit' value='submit' />
+                </form>
+            </div>
+            <div>
+                {
+                    todoList.length > 0 ?
+                        <table style={{ border: "1px solid black", marginTop: "10px" }}>
+                            <thead>
+                                <tr>
+                                    <th>Todo Name</th>
+                                    <th>Edit action</th>
+                                    <th>Delete Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {
+                                    todoList.map((todo, index) => (
+                                        <tr key={todo.id}>
+                                            {EditIndex === index ? (
+                                                <>
+                                                    <td>
+                                                        <input type='text' value={EditText} onChange={(e) => setEditedText(e.target.value)} />
+                                                    </td>
+                                                    <td><button onClick={SaveTodos}>Update</button></td>
+                                                    <td><button onClick={CancelTodos}>Cancel</button></td>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <td>{todo.value}</td>
+                                                    <td><button onClick={() => EditedTodo(index)}>Edit</button></td>
+                                                    <td><button onClick={() => DeletedTodo(todo.id)}>Delete</button></td>
+                                                </>
+                                            )}
+
+                                        </tr>
+                                    ))
+                                }
+                            </tbody>
+                        </table>
+                    : null
+                }
+            </div>
+            <div style={{ marginTop: "20px" }}>
+                {
+                    todoList.length > 0 ? <button onClick={clearAllTodos}>Clear All Todos</button> : null
+                }
+            </div>
+        </div >
+    )
+}
+
+export default TodoList
