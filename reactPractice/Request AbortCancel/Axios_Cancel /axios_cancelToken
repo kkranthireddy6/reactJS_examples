@@ -1,0 +1,41 @@
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import axios from 'axios'
+
+function DataFetch() {
+  const [user, setUser] = useState({})
+  const id = useLocation().pathname.split("/")[2]
+
+  const cancelToken = axios.CancelToken.source()
+
+  useEffect(()=>{
+    axios.get(`https://jsonplaceholder.typicode.com/users/${id}`, {cancelToken: cancelToken.token,})
+    .then(response=>setUser(response.data))
+    .catch(error=> {
+      if(axios.isCancel(error)){
+        console.log(`Request for Id: ${id} was Cancelled`)
+      }
+      else{
+        console.log(error)
+      }
+    })
+
+    return ()=>{
+      cancelToken.cancel()
+    }
+
+  }, [id])
+
+  return (
+    <div>
+      <p>{user.name}</p>
+      <p>{user.username}</p>
+      <p>{user.email}</p>
+      <Link to="/users/1">Lint to Post 1</Link><br />
+      <Link to="/users/2">Lint to Post 2</Link><br />
+      <Link to="/users/3">Lint to Post 3</Link>
+    </div>
+  )
+}
+
+export default DataFetch
