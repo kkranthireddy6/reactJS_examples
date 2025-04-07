@@ -1,0 +1,80 @@
+import React, { useState } from 'react'
+
+function TodoList() {
+
+    const [userInput, setUserInput] = useState('')
+    const [todoList, setTodosList] = useState([])
+    const [EditIndex, setEditedIndex] = useState(null)
+    const [EditText, setEditedText] = useState('')
+
+    const EditedTodo = (index) => {
+        setEditedIndex(index)
+        setEditedText(todoList[index].value)
+    }
+
+    const SaveTodos = () => {
+        const newTodo = [...todoList]
+        newTodo[EditIndex].value = EditText
+        setTodosList(newTodo)
+        setEditedIndex(null)
+        setEditedText('')
+    }
+
+    const CancelTodos = () => {
+        setEditedIndex(null)
+        setEditedText('')
+    }
+
+    const AddTodos = (e) => {
+        e.preventDefault()
+        setTodosList(prevList => [...prevList, { id: Date.now(), value: userInput }])
+        setUserInput('')
+    }
+
+    const DeletedTodo = (id) => {
+        setTodosList(todoList.filter(prevList => prevList.id !== id))
+    }
+
+    const clearAllTodos = () => {
+        setTodosList([])
+    }
+
+    return (
+        <div style={{ "marginLeft": "20px" }}>
+            <h2>Todo List App</h2>
+            <div>
+                <form onSubmit={AddTodos}>
+                    <input type='text' value={userInput} onChange={(e) => setUserInput(e.target.value)} />
+                    <input type='submit' value='submit' />
+                </form>
+            </div>
+            <div>
+                {
+                    todoList.map((item, index) => (
+                        <li key={todoList.id}>
+                            {EditIndex === index ? (
+                                <div>
+                                    <input type='text' value={EditText} onChange={(e)=>setEditedText(e.target.value)} />
+                                    <button onClick={SaveTodos}>Update</button>
+                                    <button onClick={CancelTodos}>Cancel</button>
+                                </div>
+                            ): (
+                                <div>
+                                    <span>{item.value}</span>
+                                    <button onClick={()=>EditedTodo(index)}>Edit</button>
+                                    <button onClick={()=>DeletedTodo(item.id)}>Delete</button>
+                                </div>
+                            )}
+                        </li>
+                    ))
+                }
+            </div>
+            <div>
+                {
+                    todoList.length>0 ? <button onClick={clearAllTodos}>Clear All Todos</button> : null
+                }
+            </div>
+        </div>
+    )
+}
+export default TodoList
