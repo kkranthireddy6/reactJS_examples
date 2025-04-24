@@ -1,0 +1,46 @@
+import React, { useRef, useState } from 'react'
+
+function Test() {
+
+  const [timer, setTimer] = useState(0)
+  const [Running, setRunning] = useState(false)
+  const timerRef = useRef(null)
+
+  const startorResumeTimer = () => {
+    if (Running === false) {
+      if (timerRef.current) return;
+
+      timerRef.current = setInterval(() => {
+        setTimer(prev => prev + 1)
+      }, 100);
+
+      setRunning(true)
+    }
+  }
+
+
+  const pauseTimer = () => {
+    clearInterval(timerRef.current)
+    timerRef.current = null
+    setRunning(false)
+  }
+
+  const resetBtn = () => {
+    clearInterval(timerRef.current)
+    timerRef.current = null
+    setTimer(0)
+  }
+
+
+  return (
+    <div>
+      <h2>{timer}</h2>
+       {
+        Running ? (<button onClick={pauseTimer}>pause</button>) : <button onClick={startorResumeTimer}>Resume</button>
+       }
+       <button onClick={resetBtn}>RESET</button>
+    </div>
+  )
+}
+
+export default Test
