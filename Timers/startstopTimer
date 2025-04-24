@@ -1,0 +1,36 @@
+import React, { useState, useRef } from 'react';
+
+function Test() {
+  const [timer, setTimer] = useState(0);
+  const intervalRef = useRef(null);
+
+  const startTimer = () => {
+    if (intervalRef.current) return; // Prevent multiple intervals
+
+    intervalRef.current = setInterval(() => {
+      setTimer((prev) => prev + 1);
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+  };
+
+  const reset = () => {
+    clearInterval(intervalRef.current);
+    intervalRef.current = null;
+    setTimer(0);
+  };
+
+  return (
+    <div>
+      <h3>Timer: {timer}</h3>
+      <button onClick={startTimer}>Start</button>
+      <button onClick={stopTimer}>Stop</button>
+      <button onClick={reset}>RESET</button>
+    </div>
+  );
+}
+
+export default Test;
