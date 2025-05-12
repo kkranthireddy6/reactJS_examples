@@ -1,12 +1,12 @@
 import React, { useState, useEffect, Suspense, lazy } from "react";
-const profile = lazy(() => import('./Profile'))
+const Profiles = lazy(() => import('./Profile'))
 
 export default function App() {
   return (
     <div>
       <h1>Welcome to Concurent Rendering...</h1>
       <Suspense fallback={<div>Loading Profile...</div>}>
-        <profile />
+        <Profiles />
       </Suspense>
     </div>
   );
