@@ -1,3 +1,6 @@
+//npm run ssr
+//package.json  "ssr":"node server/index.js"
+
 //npm i react express @babel/register @babel/preset-env @babel/preset-react ignore-styles  
 
 //index.js
